@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[94]:
-
 
 # this tutorial is based on YouTuber sentdex's Convolutional Neural Network image classifier: 
     # part 1: https://www.youtube.com/watch?v=gT4F3HGYXf4 
@@ -53,16 +48,10 @@ LR = 1e-3
 MODEL_NAME = 'dogsvscats-{}-{}.model'.format(LR, '6conv-basic-video')
 
 
-# In[95]:
-
-
 # Now we want to load in the images and get features and labels 
 # images are numbered as "cat.1", "dog.5" etc and they are color in color
 # we want the images (the features) to be grayscale np arrays, which is a 2D array
 # for labels, we to convert dog / cat to one-hot arrays
-
-
-# In[96]:
 
 
 # our one-hot array:
@@ -81,10 +70,7 @@ def label_img(img):
     word_label = img.split('.')[-3]
     if word_label == 'cat': return [0,1]
     elif word_label == 'dog': return [1,0]
-
-
-# In[97]:
-
+        
 
 # function to create the train data based on the label_img function
 
@@ -138,9 +124,6 @@ def create_train_data():
         
 
 
-# In[98]:
-
-
 # this function is essentially doing the same thing as the create_train_data() function, just on the images that were given to us to use as the testing images
 
 def process_test_data():
@@ -153,8 +136,6 @@ def process_test_data():
     np.save('test_data.npy', np.array(testing_data, dtype="object"))
     return testing_data
 
-
-# In[99]:
 
 
 # for these next lines, you need to pick how to get the training data
@@ -173,14 +154,7 @@ def process_test_data():
 train_data = np.load('train_data.npy', allow_pickle=True)
 
 
-
-# In[100]:
-
-
 my_data = np.load('./train_data.npy', allow_pickle=True)
-
-
-# In[101]:
 
 
 # This cell is based on code here: https://pythonprogramming.net/tflearn-machine-learning-tutorial/
@@ -242,9 +216,6 @@ convnet = regression(convnet, optimizer='adam', learning_rate=LR, loss='categori
 model = tflearn.DNN(convnet, tensorboard_dir='log')
 
 
-# In[102]:
-
-
 # before training the network, we write the following check:
 
 # this is saying, if the meta file for our model already exists, you've saved a checkpoint ie you've already saved a number of epochs
@@ -254,9 +225,6 @@ if os.path.exists('{}.meta'.format(MODEL_NAME)):
     print('model loaded!')
 
 
-# In[103]:
-
-
 # now we will separate out training and testing
 # in theory, both our testing and training data should have the same accuracy
 
@@ -264,9 +232,6 @@ if os.path.exists('{}.meta'.format(MODEL_NAME)):
 train = train_data[:-500]
 # this line says that our testing data is only the last 500 images
 test = train_data[-500:]
-
-
-# In[104]:
 
 
 # now we will process some of this to get ready for the tflearn code
@@ -281,10 +246,6 @@ Y = np.array([i[1] for i in train])
 test_x = np.array([i[0] for i in test]).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
 test_y = np.array([i[1] for i in test])
 
-
-# In[105]:
-
-
 # this is the code that will actually fit our data
 
 # model.fit() was causing a lot of weird errors - the only solution that worked was to restart the kernel
@@ -297,9 +258,6 @@ test_y = np.array([i[1] for i in test])
 # if you DO need to re-create the model, or you want to re-train a loaded model, uncomment the next two lines:
 #model.fit({'input': X}, {'target': Y}, n_epoch=5, validation_set=({'input': test_x}, {'target': test_y}), 
     #snapshot_step=500, show_metric=True, run_id=MODEL_NAME)
-
-
-# In[106]:
 
 
 # Using tensorboard!
@@ -318,19 +276,11 @@ test_y = np.array([i[1] for i in test])
 # smoothing also helps, under the settings tab on the right
 # our numbers look a little different than the tutorial, I think this is due to improvements in tensorflow over the years in addition to just the variance in training
 
-
-# In[107]:
-
-
 # Now that we have our model trained, we can save it
 # in the future, our program will load this model instead of creating a new one
 # this is what our "os.path.exists()" condition was for
 # with the model loaded, we can then re-train it by setting it run for another 5 epochs, for example
 model.save(MODEL_NAME)
-
-
-# In[109]:
-
 
 # Testing our classifier!
 
@@ -378,27 +328,6 @@ for num, data in enumerate(test_data[start:end]):
     
 plt.show()
 
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
